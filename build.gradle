@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'maven'
+}
+
+ext {
+    neoVersion = '3.0.4'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'javadoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+group 'com.github.jasoma'
+version "$neoVersion"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.7'
+    compile group: 'com.github.jasoma', name: 'neo4j-memorydb', version: neoVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile group: 'junit', name: 'junit', version: '4.12'
+
+    compileOnly group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: '1.0.3'
+    compileOnly group: 'org.neo4j', name: 'neo4j-kernel', version: neoVersion
+}
